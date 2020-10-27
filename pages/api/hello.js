@@ -1,6 +1,6 @@
 // Imports the Google Cloud client library
 import { PubSub } from '@google-cloud/pubsub';
-import {getDecryptedSecret} from '../../api/utils/decret-secret'
+import {getDecryptedSecret} from '../../utils/decret-secret'
 
 const projectId = 'iot-albert'
 // Creates a client; cache this for further use
