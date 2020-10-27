@@ -2,20 +2,22 @@
 import { PubSub } from '@google-cloud/pubsub';
 import {getDecryptedSecret} from '../../utils/decret-secret'
 
-const projectId = 'iot-albert'
+const projectId = process.env['PROJECT'] || 'iot-albert'
+const topicName = process.env['TOPIC'] || 'projects/iot-albert/topics/node-red'
 // Creates a client; cache this for further use
 const pubSubClient = new PubSub({projectId, credentials: getDecryptedSecret()});
 
 module.exports = async (req, res) => {
-    await quickstart()
-    const { name = 'World' } = req.query
-    res.status(200).send(`Hello ${name}!`)
+    const { action = '', key='' } = req.query
+    if(key === process.env['THEKEY']){
+      await quickstart(action)
+    }
+    res.status(200).send(`OK!`)
 }
 
 async function quickstart(
-    topicName = 'projects/iot-albert/topics/node-red', // Name for the new topic to create
+     action = ''
   ) {
-  
-    const messageId = await pubSubClient.topic(topicName).publish(Buffer.from('yeah!'));
+    const messageId = await pubSubClient.topic(topicName).publish(Buffer.from(action));
     console.log(`Message ${messageId} published.`);
   }
